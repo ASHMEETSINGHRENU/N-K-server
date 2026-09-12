@@ -1,0 +1,28 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_routes_js_1 = __importDefault(require("./auth.routes.js"));
+const property_routes_js_1 = __importDefault(require("./property.routes.js"));
+const broker_routes_js_1 = __importDefault(require("./broker.routes.js"));
+const lead_routes_js_1 = __importDefault(require("./lead.routes.js"));
+const client_routes_js_1 = __importDefault(require("./client.routes.js"));
+const viewing_routes_js_1 = __importDefault(require("./viewing.routes.js"));
+const commission_routes_js_1 = __importDefault(require("./commission.routes.js"));
+const insight_routes_js_1 = __importDefault(require("./insight.routes.js"));
+const cms_routes_js_1 = __importDefault(require("./cms.routes.js"));
+const analytics_routes_js_1 = __importDefault(require("./analytics.routes.js"));
+const router = (0, express_1.Router)();
+router.use('/auth', auth_routes_js_1.default);
+router.use('/properties', property_routes_js_1.default);
+router.use('/brokers', broker_routes_js_1.default);
+router.use('/leads', lead_routes_js_1.default);
+router.use('/clients', client_routes_js_1.default);
+router.use('/viewings', viewing_routes_js_1.default);
+router.use('/commissions', commission_routes_js_1.default);
+router.use('/insights', insight_routes_js_1.default);
+router.use('/cms', cms_routes_js_1.default);
+router.use('/analytics', analytics_routes_js_1.default);
+exports.default = router;

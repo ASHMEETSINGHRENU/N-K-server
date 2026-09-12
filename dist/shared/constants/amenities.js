@@ -1,0 +1,36 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LUXURY_AMENITIES = void 0;
+exports.LUXURY_AMENITIES = [
+    'Balcony',
+    'Covered Parking',
+    'Swimming Pool',
+    'Gym',
+    'Central Air Conditioning',
+    'Security',
+    'Built-in Wardrobes',
+    'Maids Room',
+    'Children\'s Play Area',
+    'Garden',
+    'Private Pool',
+    'Private Gym',
+    'Pets Allowed',
+    'Concierge',
+    'View of Landmark',
+    'View of Water',
+    'Study',
+    'Storage Room',
+    'Private Beach Access',
+    'Private Yacht Berth',
+    'Panoramic Burj Khalifa View',
+    'Private Elevator',
+    'Full Sea & Marina View',
+    'Designer Italian Kitchen',
+    'Private Cinema',
+    'Temperature-Controlled Wine Cellar',
+    'Spa & Hammam Room',
+    'Smart Home Automation',
+    'Sub-Zero & Miele Appliances',
+    'Private Rooftop Terrace',
+    'Championship Golf Course View'
+];

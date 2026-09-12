@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const commission_controller_js_1 = require("../../controllers/commissions/commission.controller.js");
+const authenticate_js_1 = require("../../middleware/authenticate.js");
+const authorize_js_1 = require("../../middleware/authorize.js");
+const router = (0, express_1.Router)();
+router.use(authenticate_js_1.authenticate, (0, authorize_js_1.authorize)('BROKER', 'ADMIN'));
+router.get('/', commission_controller_js_1.handleGetCommissions);
+router.post('/', commission_controller_js_1.handleCreateCommission);
+router.patch('/:id/status', (0, authorize_js_1.authorize)('ADMIN'), commission_controller_js_1.handleUpdateCommissionStatus);
+exports.default = router;

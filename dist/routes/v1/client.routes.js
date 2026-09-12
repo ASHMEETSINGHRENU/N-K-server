@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const client_controller_js_1 = require("../../controllers/clients/client.controller.js");
+const authenticate_js_1 = require("../../middleware/authenticate.js");
+const authorize_js_1 = require("../../middleware/authorize.js");
+const router = (0, express_1.Router)();
+router.use(authenticate_js_1.authenticate, (0, authorize_js_1.authorize)('BROKER', 'ADMIN'));
+router.get('/', client_controller_js_1.handleGetClients);
+router.post('/', client_controller_js_1.handleCreateClient);
+router.get('/:id', client_controller_js_1.handleGetClientById);
+exports.default = router;

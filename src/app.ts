@@ -56,6 +56,20 @@ export function createApp(): Express {
     app.use(morgan('dev'));
   }
 
+  // Root welcome endpoint
+  app.get('/', (req: Request, res: Response) => {
+    res.json({
+      success: true,
+      service: 'Nestandkey Luxury Dubai Real Estate API',
+      status: 'online',
+      version: '1.0.0',
+      endpoints: {
+        health: '/api/health',
+        properties: `${ENV.API_PREFIX}/properties`
+      }
+    });
+  });
+
   // Health check endpoint
   app.get('/api/health', (req: Request, res: Response) => {
     res.json({

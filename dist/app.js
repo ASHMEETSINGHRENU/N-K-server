@@ -53,6 +53,19 @@ function createApp() {
     if (env_js_1.ENV.NODE_ENV !== 'test') {
         app.use((0, morgan_1.default)('dev'));
     }
+    // Root welcome endpoint
+    app.get('/', (req, res) => {
+        res.json({
+            success: true,
+            service: 'Nestandkey Luxury Dubai Real Estate API',
+            status: 'online',
+            version: '1.0.0',
+            endpoints: {
+                health: '/api/health',
+                properties: `${env_js_1.ENV.API_PREFIX}/properties`
+            }
+        });
+    });
     // Health check endpoint
     app.get('/api/health', (req, res) => {
         res.json({

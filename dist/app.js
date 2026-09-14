@@ -56,13 +56,13 @@ function createApp() {
     // Root welcome endpoint
     app.get('/', (req, res) => {
         res.json({
-            success: true,
-            service: 'Nestandkey Luxury Dubai Real Estate API',
-            status: 'online',
-            version: '1.0.0',
-            endpoints: {
-                health: '/api/health',
-                properties: `${env_js_1.ENV.API_PREFIX}/properties`
+            "success": true,
+            "service": "Nestandkey Luxury Dubai Real Estate API",
+            "status": "online",
+            "version": "1.0.0",
+            "endpoints": {
+                "health": "/api/health",
+                "properties": "/api/v1/properties"
             }
         });
     });

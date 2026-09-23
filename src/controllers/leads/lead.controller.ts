@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { Lead } from '../../models/Lead.js';
 import { Broker } from '../../models/Broker.js';
+import { User } from '../../models/User.js';
+import { Notification } from '../../models/Notification.js';
 import { LeadActivity } from '../../models/LeadActivity.js';
 import { AuthenticatedRequest } from '../../middleware/authenticate.js';
 import { transitionLeadStatus, addLeadNote } from '../../services/lead/leadLifecycle.js';
@@ -65,14 +67,80 @@ export async function handleCreateLead(req: Request, res: Response): Promise<voi
       details: `Lead created from public inquiry. Status: NEW.`
     });
 
-    // We do NOT return mobile/email in the public success response for strict privacy
+    // Notify broker if assigned
+    let assignedBrokerDoc: any = null;
+    if (assignedBrokerId) {
+      assignedBrokerDoc = await Broker.findById(assignedBrokerId).populate('user', 'name email');
+      if (assignedBrokerDoc && assignedBrokerDoc.user) {
+        const brokerUserId = assignedBrokerDoc.user._id || assignedBrokerDoc.user;
+        await Notification.create({
+          recipient: brokerUserId,
+          title: 'New Client Inquiry Received',
+          message: `${name} has inquired regarding ${propertyId ? 'a luxury residence' : 'private advisory'}. Contact: ${clientMobile}`,
+          type: 'NEW_LEAD',
+          link: `/broker/leads/${newLead._id}`
+        });
+      }
+    }
+
+    // Notify registered client if user exists with this email
+    const clientUser = await User.findOne({ email: email.toLowerCase().trim() });
+    if (clientUser) {
+      const brokerName = assignedBrokerDoc?.title || assignedBrokerDoc?.agencyName || 'a dedicated advisor';
+      await Notification.create({
+        recipient: clientUser._id,
+        title: 'Inquiry Registered with Private Desk',
+        message: `Your inquiry #${leadId} has been assigned to ${brokerName}. They will reach out via ${preferredContactMethod || 'WhatsApp'} shortly.`,
+        type: 'STATUS_CHANGE',
+        link: '/profile'
+      });
+    }
+
     res.status(201).json({
       success: true,
       message: 'Your inquiry has been received. A dedicated private property specialist will be in touch shortly.',
-      leadReference: newLead.leadId
+      leadReference: newLead.leadId,
+      assignedBroker: assignedBrokerDoc
+        ? {
+            _id: assignedBrokerDoc._id,
+            title: assignedBrokerDoc.title,
+            agencyName: assignedBrokerDoc.agencyName,
+            photoUrl: assignedBrokerDoc.photoUrl,
+            whatsappNumber: assignedBrokerDoc.whatsappNumber
+          }
+        : null
     });
   } catch (error: any) {
     res.status(400).json({ success: false, message: error.message });
+  }
+}
+
+export async function handleGetMyLeads(req: AuthenticatedRequest, res: Response): Promise<void> {
+  try {
+    if (!req.user) {
+      res.status(401).json({ success: false, message: 'Not authenticated' });
+      return;
+    }
+
+    const user = await User.findById(req.user.id);
+    const userEmail = (user?.email || req.user.email || '').toLowerCase().trim();
+
+    if (!userEmail) {
+      res.status(400).json({ success: false, message: 'User email not found' });
+      return;
+    }
+
+    const leads = await Lead.find({ email: userEmail })
+      .populate('property', 'title slug priceAED community propertyType featuredImage images')
+      .populate({
+        path: 'broker',
+        populate: { path: 'user', select: 'name email phone avatar' }
+      })
+      .sort({ createdAt: -1 });
+
+    res.json({ success: true, count: leads.length, leads });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
   }
 }
 

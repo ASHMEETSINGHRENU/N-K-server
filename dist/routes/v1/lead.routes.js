@@ -9,6 +9,8 @@ const privacyFilter_js_1 = require("../../middleware/privacyFilter.js");
 const router = (0, express_1.Router)();
 // Public lead submission (Protected by rate limiter)
 router.post('/', rateLimiter_js_1.leadCaptureLimiter, lead_controller_js_1.handleCreateLead);
+// Authenticated client's own inquiries
+router.get('/my', authenticate_js_1.authenticate, lead_controller_js_1.handleGetMyLeads);
 // Protected routes (Broker and Admin only)
 router.get('/', authenticate_js_1.authenticate, (0, authorize_js_1.authorize)('BROKER', 'ADMIN'), privacyFilter_js_1.privacyFilter, lead_controller_js_1.handleGetLeads);
 router.get('/:id', authenticate_js_1.authenticate, (0, authorize_js_1.authorize)('BROKER', 'ADMIN'), privacyFilter_js_1.privacyFilter, lead_controller_js_1.handleGetLeadById);

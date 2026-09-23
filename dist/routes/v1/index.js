@@ -14,6 +14,7 @@ const commission_routes_js_1 = __importDefault(require("./commission.routes.js")
 const insight_routes_js_1 = __importDefault(require("./insight.routes.js"));
 const cms_routes_js_1 = __importDefault(require("./cms.routes.js"));
 const analytics_routes_js_1 = __importDefault(require("./analytics.routes.js"));
+const notification_routes_js_1 = __importDefault(require("./notification.routes.js"));
 const router = (0, express_1.Router)();
 router.use('/auth', auth_routes_js_1.default);
 router.use('/properties', property_routes_js_1.default);
@@ -25,4 +26,5 @@ router.use('/commissions', commission_routes_js_1.default);
 router.use('/insights', insight_routes_js_1.default);
 router.use('/cms', cms_routes_js_1.default);
 router.use('/analytics', analytics_routes_js_1.default);
+router.use('/notifications', notification_routes_js_1.default);
 exports.default = router;

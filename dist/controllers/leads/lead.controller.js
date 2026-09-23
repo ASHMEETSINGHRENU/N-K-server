@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleCreateLead = handleCreateLead;
+exports.handleGetMyLeads = handleGetMyLeads;
 exports.handleGetLeads = handleGetLeads;
 exports.handleGetLeadById = handleGetLeadById;
 exports.handleUpdateLeadStatus = handleUpdateLeadStatus;
@@ -8,6 +9,8 @@ exports.handleAddLeadNote = handleAddLeadNote;
 exports.handleAssignLead = handleAssignLead;
 const Lead_js_1 = require("../../models/Lead.js");
 const Broker_js_1 = require("../../models/Broker.js");
+const User_js_1 = require("../../models/User.js");
+const Notification_js_1 = require("../../models/Notification.js");
 const LeadActivity_js_1 = require("../../models/LeadActivity.js");
 const leadLifecycle_js_1 = require("../../services/lead/leadLifecycle.js");
 const leadAssignment_js_1 = require("../../services/lead/leadAssignment.js");
@@ -53,15 +56,75 @@ async function handleCreateLead(req, res) {
             type: 'STATUS_CHANGE',
             details: `Lead created from public inquiry. Status: NEW.`
         });
-        // We do NOT return mobile/email in the public success response for strict privacy
+        // Notify broker if assigned
+        let assignedBrokerDoc = null;
+        if (assignedBrokerId) {
+            assignedBrokerDoc = await Broker_js_1.Broker.findById(assignedBrokerId).populate('user', 'name email');
+            if (assignedBrokerDoc && assignedBrokerDoc.user) {
+                const brokerUserId = assignedBrokerDoc.user._id || assignedBrokerDoc.user;
+                await Notification_js_1.Notification.create({
+                    recipient: brokerUserId,
+                    title: 'New Client Inquiry Received',
+                    message: `${name} has inquired regarding ${propertyId ? 'a luxury residence' : 'private advisory'}. Contact: ${clientMobile}`,
+                    type: 'NEW_LEAD',
+                    link: `/broker/leads/${newLead._id}`
+                });
+            }
+        }
+        // Notify registered client if user exists with this email
+        const clientUser = await User_js_1.User.findOne({ email: email.toLowerCase().trim() });
+        if (clientUser) {
+            const brokerName = assignedBrokerDoc?.title || assignedBrokerDoc?.agencyName || 'a dedicated advisor';
+            await Notification_js_1.Notification.create({
+                recipient: clientUser._id,
+                title: 'Inquiry Registered with Private Desk',
+                message: `Your inquiry #${leadId} has been assigned to ${brokerName}. They will reach out via ${preferredContactMethod || 'WhatsApp'} shortly.`,
+                type: 'STATUS_CHANGE',
+                link: '/profile'
+            });
+        }
         res.status(201).json({
             success: true,
             message: 'Your inquiry has been received. A dedicated private property specialist will be in touch shortly.',
-            leadReference: newLead.leadId
+            leadReference: newLead.leadId,
+            assignedBroker: assignedBrokerDoc
+                ? {
+                    _id: assignedBrokerDoc._id,
+                    title: assignedBrokerDoc.title,
+                    agencyName: assignedBrokerDoc.agencyName,
+                    photoUrl: assignedBrokerDoc.photoUrl,
+                    whatsappNumber: assignedBrokerDoc.whatsappNumber
+                }
+                : null
         });
     }
     catch (error) {
         res.status(400).json({ success: false, message: error.message });
+    }
+}
+async function handleGetMyLeads(req, res) {
+    try {
+        if (!req.user) {
+            res.status(401).json({ success: false, message: 'Not authenticated' });
+            return;
+        }
+        const user = await User_js_1.User.findById(req.user.id);
+        const userEmail = (user?.email || req.user.email || '').toLowerCase().trim();
+        if (!userEmail) {
+            res.status(400).json({ success: false, message: 'User email not found' });
+            return;
+        }
+        const leads = await Lead_js_1.Lead.find({ email: userEmail })
+            .populate('property', 'title slug priceAED community propertyType featuredImage images')
+            .populate({
+            path: 'broker',
+            populate: { path: 'user', select: 'name email phone avatar' }
+        })
+            .sort({ createdAt: -1 });
+        res.json({ success: true, count: leads.length, leads });
+    }
+    catch (error) {
+        res.status(500).json({ success: false, message: error.message });
     }
 }
 async function handleGetLeads(req, res) {

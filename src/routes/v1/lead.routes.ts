@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
   handleCreateLead,
   handleGetLeads,
+  handleGetMyLeads,
   handleGetLeadById,
   handleUpdateLeadStatus,
   handleAddLeadNote,
@@ -16,6 +17,9 @@ const router = Router();
 
 // Public lead submission (Protected by rate limiter)
 router.post('/', leadCaptureLimiter, handleCreateLead);
+
+// Authenticated client's own inquiries
+router.get('/my', authenticate, handleGetMyLeads);
 
 // Protected routes (Broker and Admin only)
 router.get('/', authenticate, authorize('BROKER', 'ADMIN'), privacyFilter, handleGetLeads);

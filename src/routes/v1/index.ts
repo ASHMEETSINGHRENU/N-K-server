@@ -9,6 +9,7 @@ import commissionRoutes from './commission.routes.js';
 import insightRoutes from './insight.routes.js';
 import cmsRoutes from './cms.routes.js';
 import analyticsRoutes from './analytics.routes.js';
+import notificationRoutes from './notification.routes.js';
 
 const router = Router();
 
@@ -22,5 +23,6 @@ router.use('/commissions', commissionRoutes);
 router.use('/insights', insightRoutes);
 router.use('/cms', cmsRoutes);
 router.use('/analytics', analyticsRoutes);
+router.use('/notifications', notificationRoutes);
 
 export default router;

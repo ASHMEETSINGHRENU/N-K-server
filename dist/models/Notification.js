@@ -41,7 +41,16 @@ const NotificationSchema = new mongoose_1.Schema({
     message: { type: String, required: true },
     type: {
         type: String,
-        enum: ['NEW_LEAD', 'VIEWING_REQUEST', 'STATUS_CHANGE', 'COMMISSION', 'SYSTEM'],
+        enum: [
+            'NEW_LEAD',
+            'VIEWING_REQUEST',
+            'STATUS_CHANGE',
+            'COMMISSION',
+            'SYSTEM',
+            'VIEWING_SCHEDULED',
+            'BROKER_ASSIGNED',
+            'GENERAL'
+        ],
         default: 'SYSTEM'
     },
     link: { type: String },

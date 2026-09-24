@@ -1,10 +1,20 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
+export type NotificationType =
+  | 'NEW_LEAD'
+  | 'VIEWING_REQUEST'
+  | 'STATUS_CHANGE'
+  | 'COMMISSION'
+  | 'SYSTEM'
+  | 'VIEWING_SCHEDULED'
+  | 'BROKER_ASSIGNED'
+  | 'GENERAL';
+
 export interface INotificationDocument extends Document {
   recipient: mongoose.Types.ObjectId;
   title: string;
   message: string;
-  type: 'NEW_LEAD' | 'VIEWING_REQUEST' | 'STATUS_CHANGE' | 'COMMISSION' | 'SYSTEM';
+  type: NotificationType;
   link?: string;
   isRead: boolean;
 }
@@ -16,7 +26,16 @@ const NotificationSchema = new Schema<INotificationDocument>(
     message: { type: String, required: true },
     type: {
       type: String,
-      enum: ['NEW_LEAD', 'VIEWING_REQUEST', 'STATUS_CHANGE', 'COMMISSION', 'SYSTEM'],
+      enum: [
+        'NEW_LEAD',
+        'VIEWING_REQUEST',
+        'STATUS_CHANGE',
+        'COMMISSION',
+        'SYSTEM',
+        'VIEWING_SCHEDULED',
+        'BROKER_ASSIGNED',
+        'GENERAL'
+      ],
       default: 'SYSTEM'
     },
     link: { type: String },

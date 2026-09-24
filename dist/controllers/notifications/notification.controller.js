@@ -63,29 +63,54 @@ async function handleMarkAllAsRead(req, res) {
 }
 async function handleSendNotification(req, res) {
     try {
-        const { recipientEmail, recipientId, title, message, link, type } = req.body;
-        let targetUserId = recipientId;
-        if (!targetUserId && recipientEmail) {
-            const foundUser = await User_js_1.User.findOne({ email: recipientEmail.toLowerCase().trim() });
-            if (foundUser) {
-                targetUserId = foundUser._id;
-            }
-        }
-        if (!targetUserId) {
-            res.status(404).json({ success: false, message: 'Recipient user not found' });
+        const { recipientEmail, recipientId, recipientName, title, message, link, type } = req.body;
+        if (!recipientId && !recipientEmail) {
+            res.status(400).json({ success: false, message: 'Recipient email or ID is required.' });
             return;
         }
+        let targetUserId = recipientId;
+        if (!targetUserId && recipientEmail) {
+            const cleanEmail = recipientEmail.toLowerCase().trim();
+            let foundUser = await User_js_1.User.findOne({ email: cleanEmail });
+            if (!foundUser) {
+                // Auto-create client user account so notifications are persisted and ready when client registers/logs in
+                const nameToUse = recipientName || cleanEmail.split('@')[0];
+                foundUser = await User_js_1.User.create({
+                    name: nameToUse,
+                    email: cleanEmail,
+                    password: `Client_${Date.now()}_AutoPass!`,
+                    role: 'CLIENT'
+                });
+            }
+            targetUserId = foundUser._id;
+        }
+        if (!targetUserId) {
+            res.status(404).json({ success: false, message: 'Could not determine recipient user for notification.' });
+            return;
+        }
+        // Validate and sanitize notification type
+        const validTypes = [
+            'NEW_LEAD',
+            'VIEWING_REQUEST',
+            'STATUS_CHANGE',
+            'COMMISSION',
+            'SYSTEM',
+            'VIEWING_SCHEDULED',
+            'BROKER_ASSIGNED',
+            'GENERAL'
+        ];
+        const sanitizedType = validTypes.includes(type) ? type : 'STATUS_CHANGE';
         const notification = await Notification_js_1.Notification.create({
             recipient: targetUserId,
             title: title || 'Property Update',
             message: message || '',
-            type: type || 'STATUS_CHANGE',
+            type: sanitizedType,
             link: link || '/profile',
             isRead: false
         });
         res.status(201).json({
             success: true,
-            message: 'Notification sent successfully',
+            message: 'Notification transmitted successfully',
             notification
         });
     }

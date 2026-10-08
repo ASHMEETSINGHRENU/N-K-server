@@ -4,14 +4,14 @@ exports.SEED_INSIGHTS = exports.SEED_PROPERTIES = exports.SEED_USERS = void 0;
 exports.SEED_USERS = [
     {
         name: 'Alexander Sterling',
-        email: 'admin@nestandkey.com',
+        email: 'admin@crestshore.com',
         role: 'ADMIN',
         phone: '+971 4 456 7890',
         avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80'
     },
     {
         name: 'Omar Farooq',
-        email: 'omar.farooq@nestandkey.com',
+        email: 'omar.farooq@crestshore.com',
         role: 'BROKER',
         phone: '+971 50 112 3456',
         avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80',
@@ -31,7 +31,7 @@ exports.SEED_USERS = [
     },
     {
         name: 'Elena Rostova',
-        email: 'elena.rostova@nestandkey.com',
+        email: 'elena.rostova@crestshore.com',
         role: 'BROKER',
         phone: '+971 52 987 6543',
         avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80',
@@ -51,7 +51,7 @@ exports.SEED_USERS = [
     },
     {
         name: 'Tariq Mansoor',
-        email: 'tariq.mansoor@nestandkey.com',
+        email: 'tariq.mansoor@crestshore.com',
         role: 'BROKER',
         phone: '+971 55 432 1098',
         avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80',
@@ -71,7 +71,7 @@ exports.SEED_USERS = [
     },
     {
         name: 'Lord Marcus Kensington',
-        email: 'client@nestandkey.com',
+        email: 'client@crestshore.com',
         role: 'CLIENT',
         phone: '+44 7700 900123',
         avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80'
@@ -128,7 +128,7 @@ exports.SEED_PROPERTIES = [
         luxuryCollection: 'Waterfront Villas',
         views: ['Full Sea & Marina View', 'Sunset Horizon'],
         seo: {
-            metaTitle: 'Palm Jumeirah Signature Beachfront Villa | Nestandkey Dubai',
+            metaTitle: 'Palm Jumeirah Signature Beachfront Villa | Crestshore Dubai',
             metaDescription: 'Discover The Solstice Sanctuary, an AED 145M beachfront villa on Palm Jumeirah with private infinity pool and designer interiors.'
         }
     },
@@ -178,7 +178,7 @@ exports.SEED_PROPERTIES = [
         luxuryCollection: 'Dubai Penthouse Collection',
         views: ['Panoramic Burj Khalifa View', 'Full Sea & Marina View'],
         seo: {
-            metaTitle: 'Bulgari Lighthouse Penthouse AED 85M | Nestandkey',
+            metaTitle: 'Bulgari Lighthouse Penthouse AED 85M | Crestshore',
             metaDescription: 'Super-prime Bulgari Lighthouse penthouse on Jumeirah Bay Island with private yacht berth and 360-degree Dubai views.'
         }
     },
@@ -226,7 +226,7 @@ exports.SEED_PROPERTIES = [
         luxuryCollection: 'Private Residences',
         views: ['Championship Golf Course View', 'Downtown Skyline in Distance'],
         seo: {
-            metaTitle: 'Dubai Hills Golf Fairway Mansion AED 54M | Nestandkey',
+            metaTitle: 'Dubai Hills Golf Fairway Mansion AED 54M | Crestshore',
             metaDescription: 'Ultra-luxury 7-bedroom fairway mansion in Dubai Hills Estate with panoramic golf course views and subterranean entertainment.'
         }
     },
@@ -271,7 +271,7 @@ exports.SEED_PROPERTIES = [
         luxuryCollection: 'Dubai Penthouse Collection',
         views: ['Panoramic Burj Khalifa View', 'Dubai Fountain View'],
         seo: {
-            metaTitle: 'Downtown Dubai Grand Opera Duplex AED 42M | Nestandkey',
+            metaTitle: 'Downtown Dubai Grand Opera Duplex AED 42M | Crestshore',
             metaDescription: 'Prime Opera District duplex in Downtown Dubai featuring front-row views of Burj Khalifa and Dubai Fountain.'
         }
     },
@@ -361,7 +361,7 @@ exports.SEED_PROPERTIES = [
         luxuryCollection: 'Private Residences',
         views: ['Championship Golf Course View'],
         seo: {
-            metaTitle: 'Emirates Hills Ambassadorial Estate AED 72M | Nestandkey',
+            metaTitle: 'Emirates Hills Ambassadorial Estate AED 72M | Crestshore',
             metaDescription: 'Ultra-private classical mansion in Sector L, Emirates Hills overlooking the Montgomerie Championship golf links.'
         }
     },

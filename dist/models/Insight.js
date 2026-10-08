@@ -57,7 +57,7 @@ const InsightSchema = new mongoose_1.Schema({
     },
     coverImage: { type: String, required: true },
     author: {
-        name: { type: String, default: 'Nestandkey Research Team' },
+        name: { type: String, default: 'Crestshore Research Team' },
         role: { type: String, default: 'Dubai Market Strategist' },
         avatar: { type: String }
     },

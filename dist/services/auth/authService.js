@@ -50,7 +50,18 @@ async function registerUser(data) {
     };
 }
 async function authenticateUser(email, password) {
-    const user = await User_js_1.User.findOne({ email: dataClean(email) }).select('+passwordHash');
+    const cleanEmail = dataClean(email);
+    let user = await User_js_1.User.findOne({ email: cleanEmail }).select('+passwordHash');
+    if (!user) {
+        if (cleanEmail.endsWith('@crestshore.com')) {
+            const legacyEmail = cleanEmail.replace('@crestshore.com', '@nestandkey.com');
+            user = await User_js_1.User.findOne({ email: legacyEmail }).select('+passwordHash');
+        }
+        else if (cleanEmail.endsWith('@nestandkey.com')) {
+            const newEmail = cleanEmail.replace('@nestandkey.com', '@crestshore.com');
+            user = await User_js_1.User.findOne({ email: newEmail }).select('+passwordHash');
+        }
+    }
     if (!user) {
         throw new Error('Invalid email or password.');
     }

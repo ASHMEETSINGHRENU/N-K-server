@@ -55,7 +55,19 @@ export async function registerUser(data: {
 }
 
 export async function authenticateUser(email: string, password: string) {
-  const user = await User.findOne({ email: dataClean(email) }).select('+passwordHash');
+  const cleanEmail = dataClean(email);
+  let user: any = await User.findOne({ email: cleanEmail }).select('+passwordHash');
+
+  if (!user) {
+    if (cleanEmail.endsWith('@crestshore.com')) {
+      const legacyEmail = cleanEmail.replace('@crestshore.com', '@nestandkey.com');
+      user = await User.findOne({ email: legacyEmail }).select('+passwordHash');
+    } else if (cleanEmail.endsWith('@nestandkey.com')) {
+      const newEmail = cleanEmail.replace('@nestandkey.com', '@crestshore.com');
+      user = await User.findOne({ email: newEmail }).select('+passwordHash');
+    }
+  }
+
   if (!user) {
     throw new Error('Invalid email or password.');
   }

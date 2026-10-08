@@ -33,7 +33,7 @@ export async function handleCreateLead(req: Request, res: Response): Promise<voi
 
     // Auto-assign to property listing broker or available broker
     const assignedBrokerId = await autoAssignLead(propertyId);
-    const leadId = `NK-LD-${Date.now().toString(36).toUpperCase()}-${Math.floor(100 + Math.random() * 900)}`;
+    const leadId = `CS-LD-${Date.now().toString(36).toUpperCase()}-${Math.floor(100 + Math.random() * 900)}`;
 
     const newLead = await Lead.create({
       leadId,
@@ -52,7 +52,7 @@ export async function handleCreateLead(req: Request, res: Response): Promise<voi
       notes: [
         {
           author: 'SYSTEM',
-          text: `Inquiry submitted online via ${source || 'Nestandkey Portal'}. Initial lead created.`,
+          text: `Inquiry submitted online via ${source || 'Crestshore Portal'}. Initial lead created.`,
           createdAt: new Date()
         }
       ],

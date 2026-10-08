@@ -87,7 +87,7 @@ export async function handleCreateProperty(req: AuthenticatedRequest, res: Respo
     }
 
     const slug = body.slug || slugify(body.title) + '-' + Math.floor(1000 + Math.random() * 9000);
-    const referenceNumber = body.referenceNumber || `NK-${Math.floor(100000 + Math.random() * 900000)}`;
+    const referenceNumber = body.referenceNumber || `CS-${Math.floor(100000 + Math.random() * 900000)}`;
 
     const newProperty = await Property.create({
       ...body,

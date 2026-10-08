@@ -25,7 +25,7 @@ async function handleCreateLead(req, res) {
         }
         // Auto-assign to property listing broker or available broker
         const assignedBrokerId = await (0, leadAssignment_js_1.autoAssignLead)(propertyId);
-        const leadId = `NK-LD-${Date.now().toString(36).toUpperCase()}-${Math.floor(100 + Math.random() * 900)}`;
+        const leadId = `CS-LD-${Date.now().toString(36).toUpperCase()}-${Math.floor(100 + Math.random() * 900)}`;
         const newLead = await Lead_js_1.Lead.create({
             leadId,
             name,
@@ -43,7 +43,7 @@ async function handleCreateLead(req, res) {
             notes: [
                 {
                     author: 'SYSTEM',
-                    text: `Inquiry submitted online via ${source || 'Nestandkey Portal'}. Initial lead created.`,
+                    text: `Inquiry submitted online via ${source || 'Crestshore Portal'}. Initial lead created.`,
                     createdAt: new Date()
                 }
             ],

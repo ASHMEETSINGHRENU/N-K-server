@@ -26,7 +26,7 @@ const BrokerSchema = new Schema<IBrokerDocument>(
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true, index: true },
     reraNumber: { type: String, required: true, unique: true, trim: true, index: true },
     brn: { type: String, required: true, trim: true },
-    agencyName: { type: String, default: 'Nestandkey Luxury Real Estate LLC' },
+    agencyName: { type: String, default: 'Crestshore Luxury Real Estate LLC' },
     title: { type: String, default: 'Private Client Advisor' },
     photoUrl: { type: String, required: true },
     bio: { type: String, default: '' },

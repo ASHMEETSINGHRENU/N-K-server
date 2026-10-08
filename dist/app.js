@@ -57,7 +57,7 @@ function createApp() {
     app.get('/', (req, res) => {
         res.json({
             "success": true,
-            "service": "Nestandkey Luxury Dubai Real Estate API",
+            "service": "Crestshore Luxury Dubai Real Estate API",
             "status": "online",
             "version": "1.0.0",
             "endpoints": {
@@ -70,7 +70,7 @@ function createApp() {
     app.get('/api/health', (req, res) => {
         res.json({
             status: 'healthy',
-            service: 'Nestandkey Luxury Dubai Real Estate API',
+            service: 'Crestshore Luxury Dubai Real Estate API',
             timestamp: new Date().toISOString(),
             environment: env_js_1.ENV.NODE_ENV
         });

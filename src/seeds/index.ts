@@ -20,7 +20,7 @@ import { SEED_USERS, SEED_PROPERTIES, SEED_INSIGHTS } from './seedData.js';
 import { DUBAI_COMMUNITIES, DUBAI_DEVELOPERS } from '../shared/constants/dubaiLocations.js';
 
 async function seed() {
-  console.log('--- Starting Nestandkey Dubai Database Seeding ---');
+  console.log('--- Starting Crestshore Dubai Database Seeding ---');
   await connectDatabase();
 
   // Clear collections
@@ -113,7 +113,7 @@ async function seed() {
         user: userDoc._id,
         reraNumber: bp.reraNumber,
         brn: bp.brn,
-        agencyName: 'Nestandkey Luxury Real Estate LLC',
+        agencyName: 'Crestshore Luxury Real Estate LLC',
         title: bp.title,
         photoUrl: u.avatar,
         bio: `Specialized luxury advisor with over ${bp.experienceYears} years advising high-net-worth families in Dubai.`,
@@ -172,7 +172,7 @@ async function seed() {
     const status = sampleStatuses[i % sampleStatuses.length];
 
     const leadDoc = await Lead.create({
-      leadId: `NK-LD-2026-${1000 + i}`,
+      leadId: `CS-LD-2026-${1000 + i}`,
       name: s.name,
       email: s.email,
       mobile: s.mobile,
@@ -240,7 +240,7 @@ async function seed() {
       ...ins,
       author: {
         name: 'Alexander Sterling',
-        role: 'Chief Investment Strategist, Nestandkey'
+        role: 'Chief Investment Strategist, Crestshore'
       }
     });
   }
@@ -265,7 +265,7 @@ async function seed() {
     },
     contactInfo: {
       phone: '+971 4 456 7890',
-      email: 'private@nestandkey.com',
+      email: 'private@crestshore.com',
       officeAddress: 'Level 42, ICD Brookfield Place, DIFC, Dubai, United Arab Emirates',
       reraRegistrationNumber: 'RERA ORN 28941',
       trnNumber: '100293848100003',
@@ -280,7 +280,7 @@ async function seed() {
   });
   console.log(`✓ Seeded Website CMS content.`);
 
-  console.log('--- Nestandkey Database Seeding Finished Successfully! ---');
+  console.log('--- Crestshore Database Seeding Finished Successfully! ---');
   await mongoose.disconnect();
 }
 

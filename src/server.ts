@@ -10,7 +10,7 @@ async function startServer() {
     const server = app.listen(ENV.PORT, () => {
       console.log(`
 ===========================================================
-  NESTANDKEY — LUXURY DUBAI REAL ESTATE ECOSYSTEM
+  CRESTSHORE — LUXURY DUBAI REAL ESTATE ECOSYSTEM
 ===========================================================
   API Server Status: RUNNING
   Environment:       ${ENV.NODE_ENV}
@@ -30,7 +30,7 @@ async function startServer() {
       });
     });
   } catch (err) {
-    console.error('Failed to start Nestandkey API Server:', err);
+    console.error('Failed to start Crestshore API Server:', err);
     process.exit(1);
   }
 }

@@ -74,7 +74,7 @@ const WebsiteContentSchema = new mongoose_1.Schema({
     },
     contactInfo: {
         phone: { type: String, default: '+971 4 456 7890' },
-        email: { type: String, default: 'private@nestandkey.com' },
+        email: { type: String, default: 'private@crestshore.com' },
         officeAddress: { type: String, default: 'Level 42, ICD Brookfield Place, DIFC, Dubai, United Arab Emirates' },
         reraRegistrationNumber: { type: String, default: 'RERA ORN 28941' },
         trnNumber: { type: String, default: '100293848100003' },

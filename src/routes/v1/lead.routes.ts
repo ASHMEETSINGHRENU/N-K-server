@@ -8,15 +8,15 @@ import {
   handleAddLeadNote,
   handleAssignLead
 } from '../../controllers/leads/lead.controller.js';
-import { authenticate } from '../../middleware/authenticate.js';
+import { authenticate, optionalAuthenticate } from '../../middleware/authenticate.js';
 import { authorize } from '../../middleware/authorize.js';
 import { leadCaptureLimiter } from '../../middleware/rateLimiter.js';
 import { privacyFilter } from '../../middleware/privacyFilter.js';
 
 const router = Router();
 
-// Public lead submission (Protected by rate limiter)
-router.post('/', leadCaptureLimiter, handleCreateLead);
+// Public / Broker lead submission (Protected by rate limiter, optional auth)
+router.post('/', leadCaptureLimiter, optionalAuthenticate, handleCreateLead);
 
 // Authenticated client's own inquiries
 router.get('/my', authenticate, handleGetMyLeads);

@@ -9,31 +9,62 @@ import { transitionLeadStatus, addLeadNote } from '../../services/lead/leadLifec
 import { autoAssignLead, assignLeadToBroker } from '../../services/lead/leadAssignment.js';
 import { scoreLead } from '../../services/lead/leadScoring.js';
 
-export async function handleCreateLead(req: Request, res: Response): Promise<void> {
+export async function handleCreateLead(req: AuthenticatedRequest, res: Response): Promise<void> {
   try {
     const {
-      name,
-      email,
-      mobile,
+      email: inputEmail,
       preferredContactMethod,
       propertyId,
       source,
       campaign,
       leadType,
       message,
-      estimatedBudgetAED
+      estimatedBudgetAED,
+      isAnonymous,
+      projectName,
+      assignedRM,
+      status: inputStatus
     } = req.body;
 
-    const clientMobile = req.body.mobile || req.body.phone;
+    const leadNum = Math.floor(100000 + Math.random() * 900000);
+    const leadId = req.body.leadId || `CS-LEAD-${leadNum}`;
 
-    if (!name || !email || !clientMobile) {
-      res.status(400).json({ success: false, message: 'Name, email, and mobile/phone are required.' });
-      return;
+    let name = req.body.name;
+    let email = inputEmail;
+    let clientMobile = req.body.mobile || req.body.phone;
+
+    if (isAnonymous) {
+      name = name || `Confidential Client (${leadId})`;
+      email = email || `${leadId.toLowerCase()}@crestshore-private.ae`;
+      clientMobile = clientMobile || '+971 4 000 0000';
+    } else {
+      if (!name && !email && !clientMobile) {
+        // Fallback to anonymous ID if broker submitted without contact info
+        name = `Confidential Client (${leadId})`;
+        email = `${leadId.toLowerCase()}@crestshore-private.ae`;
+        clientMobile = '+971 4 000 0000';
+      } else {
+        name = name || `Client Mandate (${leadId})`;
+        email = email || `${leadId.toLowerCase()}@crestshore-private.ae`;
+        clientMobile = clientMobile || '+971 4 000 0000';
+      }
     }
 
-    // Auto-assign to property listing broker or available broker
-    const assignedBrokerId = await autoAssignLead(propertyId);
-    const leadId = `CS-LD-${Date.now().toString(36).toUpperCase()}-${Math.floor(100 + Math.random() * 900)}`;
+    // Determine broker assignment: if authenticated as broker, assign directly to them
+    let assignedBrokerId: any = undefined;
+    if (req.user?.role === 'BROKER') {
+      const broker = await Broker.findOne({ user: req.user.id });
+      if (broker) {
+        assignedBrokerId = broker._id;
+      }
+    }
+
+    if (!assignedBrokerId) {
+      assignedBrokerId = await autoAssignLead(propertyId);
+    }
+
+    const initialStage = inputStatus || 'NEW';
+    const effectiveRM = assignedRM || 'Tariq Al-Mansoor (Principal RM)';
 
     const newLead = await Lead.create({
       leadId,
@@ -43,28 +74,31 @@ export async function handleCreateLead(req: Request, res: Response): Promise<voi
       preferredContactMethod: preferredContactMethod || 'WHATSAPP',
       property: propertyId || undefined,
       broker: assignedBrokerId || undefined,
-      source: source || 'WEBSITE',
+      source: source || 'REFERRAL',
       campaign,
       leadType: leadType || 'INQUIRY',
       message: message || '',
       estimatedBudgetAED: estimatedBudgetAED ? Number(estimatedBudgetAED) : undefined,
-      status: 'NEW',
+      status: initialStage,
+      isAnonymous: Boolean(isAnonymous),
+      assignedRM: effectiveRM,
+      projectName: projectName || '',
       notes: [
         {
-          author: 'SYSTEM',
-          text: `Inquiry submitted online via ${source || 'Crestshore Portal'}. Initial lead created.`,
+          author: req.user?.email || 'SYSTEM',
+          text: `Inquiry registered for ${projectName || 'Luxury Residence'}. Assigned RM: ${effectiveRM}. Status: ${initialStage}.`,
           createdAt: new Date()
         }
       ],
       lastActivity: new Date()
     });
 
-    // Record initial activity
+    // Record initial CRM activity with exact timestamp
     await LeadActivity.create({
       lead: newLead._id,
-      actor: 'SYSTEM',
+      actor: req.user?.email || 'SYSTEM',
       type: 'STATUS_CHANGE',
-      details: `Lead created from public inquiry. Status: NEW.`
+      details: `Lead registered (${isAnonymous ? 'Confidential / Anonymous' : name}) for ${projectName || 'Dubai Prime Portfolio'}. Assigned RM: ${effectiveRM}. Status: ${initialStage}.`
     });
 
     // Notify broker if assigned

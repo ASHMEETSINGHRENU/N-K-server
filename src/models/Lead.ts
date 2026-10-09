@@ -14,6 +14,9 @@ export interface ILeadDocument extends Document {
   message: string;
   status: 'NEW' | 'CONTACTED' | 'QUALIFIED' | 'VIEWING' | 'NEGOTIATION' | 'CONVERTED' | 'LOST';
   estimatedBudgetAED?: number;
+  isAnonymous?: boolean;
+  assignedRM?: string;
+  projectName?: string;
   notes: Array<{
     author: string;
     text: string;
@@ -29,6 +32,9 @@ const LeadSchema = new Schema<ILeadDocument>(
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, trim: true, lowercase: true, index: true },
     mobile: { type: String, required: true, trim: true },
+    isAnonymous: { type: Boolean, default: false },
+    assignedRM: { type: String, default: 'Tariq Al-Mansoor (Principal RM)' },
+    projectName: { type: String },
     preferredContactMethod: {
       type: String,
       enum: ['PHONE', 'WHATSAPP', 'EMAIL'],

@@ -7,8 +7,8 @@ const authorize_js_1 = require("../../middleware/authorize.js");
 const rateLimiter_js_1 = require("../../middleware/rateLimiter.js");
 const privacyFilter_js_1 = require("../../middleware/privacyFilter.js");
 const router = (0, express_1.Router)();
-// Public lead submission (Protected by rate limiter)
-router.post('/', rateLimiter_js_1.leadCaptureLimiter, lead_controller_js_1.handleCreateLead);
+// Public / Broker lead submission (Protected by rate limiter, optional auth)
+router.post('/', rateLimiter_js_1.leadCaptureLimiter, authenticate_js_1.optionalAuthenticate, lead_controller_js_1.handleCreateLead);
 // Authenticated client's own inquiries
 router.get('/my', authenticate_js_1.authenticate, lead_controller_js_1.handleGetMyLeads);
 // Protected routes (Broker and Admin only)

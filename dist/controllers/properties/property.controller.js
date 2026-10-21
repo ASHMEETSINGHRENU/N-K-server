@@ -26,7 +26,11 @@ async function handleGetFeaturedProperties(req, res) {
         const properties = await Property_js_1.Property.find({ status: 'ACTIVE', isFeatured: true })
             .populate({
             path: 'assignedBroker',
-            select: 'reraNumber brn title photoUrl languages rating agencyName'
+            select: 'reraNumber brn title photoUrl languages rating agencyName experienceYears whatsappNumber user',
+            populate: {
+                path: 'user',
+                select: 'name email phone avatar'
+            }
         })
             .limit(6);
         res.json({ success: true, properties });
@@ -40,7 +44,11 @@ async function handleGetNewLaunches(req, res) {
         const properties = await Property_js_1.Property.find({ status: 'ACTIVE', isNewLaunch: true })
             .populate({
             path: 'assignedBroker',
-            select: 'reraNumber brn title photoUrl languages rating agencyName'
+            select: 'reraNumber brn title photoUrl languages rating agencyName experienceYears whatsappNumber user',
+            populate: {
+                path: 'user',
+                select: 'name email phone avatar'
+            }
         })
             .limit(6);
         res.json({ success: true, properties });

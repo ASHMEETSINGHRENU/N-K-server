@@ -170,7 +170,11 @@ async function queryProperties(filters) {
         Property_js_1.Property.find(query)
             .populate({
             path: 'assignedBroker',
-            select: 'reraNumber brn title photoUrl bio languages rating experienceYears agencyName whatsappNumber'
+            select: 'reraNumber brn title photoUrl bio languages rating experienceYears agencyName whatsappNumber user',
+            populate: {
+                path: 'user',
+                select: 'name email phone avatar'
+            }
         })
             .sort(sortCriteria)
             .skip(skip)
@@ -191,6 +195,10 @@ async function getPropertyBySlug(slug) {
     return Property_js_1.Property.findOne({ slug })
         .populate({
         path: 'assignedBroker',
-        select: 'reraNumber brn title photoUrl bio languages rating experienceYears agencyName whatsappNumber'
+        select: 'reraNumber brn title photoUrl bio languages rating experienceYears agencyName whatsappNumber user',
+        populate: {
+            path: 'user',
+            select: 'name email phone avatar'
+        }
     });
 }
